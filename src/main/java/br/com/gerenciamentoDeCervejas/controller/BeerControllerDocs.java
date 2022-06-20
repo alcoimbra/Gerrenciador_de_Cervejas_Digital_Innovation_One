@@ -1,5 +1,7 @@
 package br.com.gerenciamentoDeCervejas.controller;
 
+import br.com.gerenciamentoDeCervejas.dto.BeerDTO;
+import br.com.gerenciamentoDeCervejas.exception.BeerAlreadyRegisteredException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -12,5 +14,5 @@ public interface BeerControllerDocs {
 	@ApiResponses(value = {
 			@ApiResponse(code = 200, message = "Returns a Simple Hello World")
 	})
-	String helloApi();
+	BeerDTO createBeer(BeerDTO beerDTO) throws BeerAlreadyRegisteredException;	
 }

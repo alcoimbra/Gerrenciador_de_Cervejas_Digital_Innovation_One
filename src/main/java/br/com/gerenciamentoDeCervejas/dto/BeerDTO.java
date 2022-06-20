@@ -1,44 +1,54 @@
-package br.com.gerenciamentoDeCervejas.entity;
+package br.com.gerenciamentoDeCervejas.dto;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import br.com.gerenciamentoDeCervejas.enums.BeerType;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Entity
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Beer {
+public class BeerDTO {
 	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column(nullable = false, unique = true)
+	@NotNull
+	@Size(min = 1, max = 200)
 	private String name;
 	
-	@Column(nullable = false)
+	@NotNull
+	@Size(min = 1, max = 200)
 	private String brand;
 	
-	@Column(nullable = false)
+	@NotNull
+	@Max(2)
 	private Integer max;
-	
-	@Column(nullable = false)
+
+	@NotNull
+	@Max(100)
 	private Integer quantity;
 	
 	@Enumerated(EnumType.STRING)
-	@Column(nullable = false)
+	@NotNull
 	private BeerType beerType;
 
+	public BeerDTO(Long id, String name, String brand, Integer max, Integer quantity, BeerType beerType) {
+		this.id = id;
+		this.name = name;
+		this.brand = brand;
+		this.max = max;
+		this.quantity = quantity;
+		this.beerType = beerType;
+	}
+	
 	public Long getId() {
 		return id;
 	}

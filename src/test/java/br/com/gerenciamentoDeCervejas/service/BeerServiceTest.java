@@ -16,6 +16,7 @@ import br.com.gerenciamentoDeCervejas.builder.BeerDTOBuilder;
 import br.com.gerenciamentoDeCervejas.dto.BeerDTO;
 import br.com.gerenciamentoDeCervejas.entity.Beer;
 import br.com.gerenciamentoDeCervejas.exception.BeerAlreadyRegisteredException;
+import br.com.gerenciamentoDeCervejas.exception.BeerNotFoundException;
 import br.com.gerenciamentoDeCervejas.mapper.BeerMapper;
 import br.com.gerenciamentoDeCervejas.repository.BeerRepository;
 
@@ -55,5 +56,25 @@ public class BeerServiceTest {
 		when(this.beerRepository.findByName(beerDTO.getName())).thenReturn(Optional.of(duplicateBeer));
 		
 		assertThrows(BeerAlreadyRegisteredException.class, () -> beerService.createBeer(beerDTO));
+	}
+	
+	void whenValidBeerNameIsGivenThenReturnABeer() throws BeerNotFoundException {
+		BeerDTO expectedBeerDTO = BeerDTOBuilder.builder().build().toBeerDTO();
+		Beer expectedFoundBeer = this.beerMapper.toModel(expectedBeerDTO);
+		
+		when(this.beerRepository.findByName(expectedBeerDTO.getName())).thenReturn(Optional.of(expectedFoundBeer));
+		
+		BeerDTO foundBeerDTO = this.beerService.findByName(expectedBeerDTO.getName());
+		
+		assertEquals(expectedBeerDTO, foundBeerDTO);
+	}
+	
+	@Test
+	void whenNotRegisteredBeerNameIsGivenThenThrowAsException() throws BeerNotFoundException {
+		BeerDTO expectedBeerDTO = BeerDTOBuilder.builder().build().toBeerDTO();
+		
+		when(this.beerRepository.findByName(expectedBeerDTO.getName())).thenReturn(Optional.empty());
+		
+		assertThrows(BeerNotFoundException.class, () -> this.beerService.findByName(expectedBeerDTO.getName()));
 	}
 }

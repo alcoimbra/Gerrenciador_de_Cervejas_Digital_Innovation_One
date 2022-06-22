@@ -33,17 +33,4 @@ public class BeerDTOBuilder {
 	public BeerDTO toBeerDTO() {
 		return new BeerDTO(id, name, brand, max, quantity, beerType);
 	}
-	
-	public static String asJsonString(BeerDTO beerDTO) {
-		try {
-			ObjectMapper objectMapper = new ObjectMapper();
-			objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-			objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
-			objectMapper.registerModules(new JavaTimeModule());
-			
-			return objectMapper.writeValueAsString(beerDTO);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
 }
